@@ -70,7 +70,7 @@ describe 'Refresh token - Customer', type: :request do
         access_token, refresh_token = jwt_and_refresh_token(customer, 'user')
         
         # previous versions did not have an expire_at field. those tokens should still be valid
-        RefreshToken.find_by_token(refresh_token).update_attributes(expire_at: nil)
+        RefreshToken.find_by_token(refresh_token).update(expire_at: nil)
 
         post '/customers/tokens', headers: { 'Authorization': "Bearer #{access_token}", 'Refresh-Token': refresh_token }
 
