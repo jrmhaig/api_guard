@@ -51,14 +51,9 @@ module ApiGuard
       # Create tokens and set response headers
       def create_token_and_set_header(resource, resource_name)
         access_token, refresh_token = jwt_and_refresh_token(resource, resource_name)
-        set_token_headers(access_token, refresh_token)
-      end
 
-      # Set token details in response headers
-      def set_token_headers(token, refresh_token = nil)
-        response.headers['Access-Token'] = token
-        response.headers['Refresh-Token'] = refresh_token if refresh_token
-        response.headers['Expire-At'] = token_expire_at.to_s
+        ApiGuard.access_token.store(access_token, packet: response)
+        ApiGuard.refresh_token.store(refresh_token, packet: response)
       end
 
       # Set token issued at to current timestamp

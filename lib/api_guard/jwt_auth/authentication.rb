@@ -24,7 +24,7 @@ module ApiGuard
       def authenticate_and_set_resources(resource_names)
         @resource_names = resource_names
 
-        @token = request.headers['Authorization']&.split('Bearer ')&.last
+        @token = ApiGuard.access_token.fetch(packet: request)
         return render_error(401, message: I18n.t('api_guard.access_token.missing')) unless @token
 
         authenticate_token

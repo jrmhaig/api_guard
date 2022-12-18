@@ -19,7 +19,7 @@ module ApiGuard
     private
 
     def find_refresh_token
-      refresh_token_from_header = request.headers['Refresh-Token']
+      refresh_token_from_header = ApiGuard.refresh_token.fetch(packet: request)
 
       if refresh_token_from_header
         @refresh_token = find_refresh_token_of(current_resource, refresh_token_from_header)

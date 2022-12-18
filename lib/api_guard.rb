@@ -33,11 +33,29 @@ module ApiGuard
     {}
   end
 
+  mattr_accessor :access_token_store
+  self.access_token_store = 'Header'
+
+  mattr_accessor :refresh_token_store
+  self.refresh_token_store = 'Header'
+
   def self.setup
     yield self
   end
 
   def self.map_resource(routes_for, class_name)
     mapped_resource[routes_for.to_sym] = ApiGuard::ResourceMapper.new(routes_for, class_name)
+  end
+
+  def self.access_token
+    Module.const_get("ApiGuard::AccessToken::#{self.refresh_token_store}").new(
+      validity: self.token_validity
+    )
+  end
+
+  def self.refresh_token
+    Module.const_get("ApiGuard::RefreshToken::#{self.refresh_token_store}").new(
+      validity: self.refresh_token_validity
+    )
   end
 end
