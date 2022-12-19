@@ -1,24 +1,17 @@
+# frozen_string_literal: true
+
+require 'api_guard/base_token'
+require 'api_guard/mixins/cookie'
+
 module ApiGuard
   module RefreshToken
-    class Cookie
-      def initialize(validity:)
-        @validity = validity || 5 * 60
-      end
+    class Cookie < ApiGuard::BaseToken
+      include ApiGuard::Mixins::Cookie
 
-      def store(value, packet:)
-        packet.set_cookie(
-          'refresh_token',
-          {
-            value: value,
-            http_only: true,
-            expires: Time.now + @validity,
-            path: '/'
-          }
-        )
-      end
+      def initialize(**kwargs)
+        super(**kwargs)
 
-      def fetch(packet:)
-        packet.cookies['refresh_token']
+        @token = 'refresh_token'
       end
     end
   end

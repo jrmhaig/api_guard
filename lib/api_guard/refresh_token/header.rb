@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
+require 'api_guard/base_token'
+
 module ApiGuard
   module RefreshToken
-    class Header
-      def initialize(validity:)
-        @validity = validity
-      end
-
+    class Header < ApiGuard::BaseToken
       def store(value, packet:)
         packet.headers['Refresh-Token'] = value
       end
